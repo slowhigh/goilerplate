@@ -17,7 +17,7 @@ type Person struct {
 // 더 많은 참고 https://pkg.go.dev/github.com/go-playground/validator#hdr-Required
 
 type Video struct {
-	Title       string `json:"titie" binding:"min=2,max=10" validate:"is-cool"` // "is-cool"이라는 이름의 사용자 유효성 검사 사용 video-controller.go 파일에 New메소드 참조
+	Title       string `json:"title" binding:"min=2,max=10" validate:"is-cool"` // "is-cool"이라는 이름의 사용자 유효성 검사 사용 video-controller.go 파일에 New메소드 참조
 	Description string `json:"description" binding:"max=20"` // "min"은 최소 길이, "max"는 최대 길이
 	URL         string `json:"url" binding:"required,url"` //"url"은 url 형식 유효성
 	Author      Person `json:"author" binding:"required"`
