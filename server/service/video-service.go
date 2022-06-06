@@ -1,6 +1,6 @@
 package service
 
-import "github.com/someday-94/react-go-mongo-demo/entity"
+import "github.com/someday-94/react-go-mongo-demo/server/entity"
 
 type VideoService interface {
 	FindAll() []entity.Video

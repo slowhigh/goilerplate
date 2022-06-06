@@ -19,11 +19,11 @@ func Test_GET_ReadAll(t *testing.T) {
 	req.Header.Add("cache-control", "no-cache")
 
 	res, _ := http.DefaultClient.Do(req)
-
-	defer res.Body.Close()
+	
 	body, _ := ioutil.ReadAll(res.Body)
-
+	defer res.Body.Close()
+	
 	fmt.Println(res)
 	fmt.Println(string(body))
-
+	
 }

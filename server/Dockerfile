@@ -1,6 +1,6 @@
 FROM golang:latest
 
-LABEL maintainer="someday"
+LABEL maintainer="someday94"
 
 WORKDIR /app
 
@@ -20,4 +20,4 @@ RUN find . -name "*.go" -type f -delete
 
 EXPOSE $PORT
 
-CMD ["./react-go-mongo-demo"]
+CMD ["./server"]

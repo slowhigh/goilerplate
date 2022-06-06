@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/someday-94/react-go-mongo-demo/controller"
-	"github.com/someday-94/react-go-mongo-demo/middlewares"
-	"github.com/someday-94/react-go-mongo-demo/service"
+	"github.com/someday-94/react-go-mongo-demo/server/controller"
+	"github.com/someday-94/react-go-mongo-demo/server/middlewares"
+	"github.com/someday-94/react-go-mongo-demo/server/service"
 	gindump "github.com/tpkeeper/gin-dump"
 )
 

@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/someday-94/react-go-mongo-demo/entity"
-	"github.com/someday-94/react-go-mongo-demo/service"
-	"github.com/someday-94/react-go-mongo-demo/validators"
+	"github.com/someday-94/react-go-mongo-demo/server/entity"
+	"github.com/someday-94/react-go-mongo-demo/server/service"
+	"github.com/someday-94/react-go-mongo-demo/server/validators"
 )
 
 type VideoController interface {
