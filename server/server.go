@@ -36,9 +36,9 @@ func main() {
 	// Case-1
 	//server.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth(), gindump.Dump())
 	//apiRoutes := server.Group("/api")
-	
+
 	// Case-1 처럼하게 되면 아래 /view 경로일때도 middlewares.BasicAuth() 가 동작하여 id, pw를 입력해야 하지만,
-	// Case-2 처럼하게 되면 /api 일때만 middlewares.BasicAuth()가 동작하고 
+	// Case-2 처럼하게 되면 /api 일때만 middlewares.BasicAuth()가 동작하고
 	// 기존의 gin.Recovery(), middlewares.Logger(), gindump.Dump()는 모든 path("/api", "/view" 등)에 동일하게 적용된다.
 
 	// Case-2
@@ -64,9 +64,9 @@ func main() {
 		viewRoutes.GET("/videos", videoController.ShowAll)
 	}
 
-
-	//server.Run(":8080")
-	port := os.Getenv("PORT") // 나중에 docker-compose.yaml 파일에 PORT 변수 값을 지정해 주면 그걸 가져다 사용할 수도 있을거 같다.
+	// server.Run(":8080")
+	// 나중에 docker-compose.yaml 파일 또는 Dockerfile 파일에 PORT 변수 값을 지정해 주면 그걸 가져다 사용할 수도 있을거 같다.
+	port := os.Getenv("PORT")
 
 	if port == "" {
 		port = "5000"
