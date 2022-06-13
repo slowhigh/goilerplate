@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/someday-94/TypeScript-Go-MongoDB/server/entity"
-	"github.com/someday-94/TypeScript-Go-MongoDB/server/service"
-	"github.com/someday-94/TypeScript-Go-MongoDB/server/validators"
+	"github.com/someday-94/TypeGoMongo-Server/entity"
+	"github.com/someday-94/TypeGoMongo-Server/service"
+	"github.com/someday-94/TypeGoMongo-Server/validators"
 )
 
 type VideoController interface {

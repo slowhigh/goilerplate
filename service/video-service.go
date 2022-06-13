@@ -1,6 +1,6 @@
 package service
 
-import "github.com/someday-94/TypeScript-Go-MongoDB/server/entity"
+import "github.com/someday-94/TypeGoMongo-Server/entity"
 
 type VideoService interface {
 	FindAll() []entity.Video
