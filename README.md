@@ -12,13 +12,13 @@
 <br>
 <br>
 
-# Heroku로 배포하는 방법
+# Heroku Deploy
 
 ## Local Deployment
-#### "Profile" 파일의 내용
+#### "Profile" File
 ```
-(ubuntu) web: bin/{프로젝트 이름}           ex) web: bin/TypeGoMongo-Server
-(window) web: bin\{프로젝트 이름}.exe       ex) web: bin\TypeGoMongo-Server.exe
+(ubuntu) web: bin/{Project Name}           ex) web: bin/TypeGoMongo-Server
+(window) web: bin\{Project Name}.exe       ex) web: bin\TypeGoMongo-Server.exe
 ```
 #### Build
 ```
@@ -34,11 +34,12 @@
 <br>
 
 ## Remote Deployment
-#### "Profile" 파일의 내용
+#### "Profile" File
 ```
 (ubuntu) web: bin/{project name}           ex) web: bin/TypeGoMongo-Server
 (window) web: bin\{project name}.exe       ex) web: bin\TypeGoMongo-Server.exe
 ```
+
 #### Deploy
 ```
 (ubuntu)
@@ -50,4 +51,9 @@ PS ~\TypeGoMongo-Server> git switch master
 PS ~\TypeGoMongo-Server> git add .
 PS ~\TypeGoMongo-Server> git commit -m "deploy"            => The message may be 'ver 1.0.0.0' or others.
 PS ~\TypeGoMongo-Server> git push heroku master             => The heroku is name of remote.
+```
+
+#### Destroy
+```
+heroku destroy --confirm {App Name}         ex) heroku destroy --confirm type-go-mongo
 ```
