@@ -14,7 +14,7 @@ COPY . .
 
 ENV PORT 5000
 
-RUN go build
+RUN go build -o ./server .
 
 RUN find . -name "*.go" -type f -delete
 
