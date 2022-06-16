@@ -1,9 +1,11 @@
-name: Build
+name: Check
 
-on: [push]
+on:
+  push:
+    branches: [ "main", "deploy" ]
 
 jobs:
-  compile:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,4 +19,6 @@ jobs:
       - name: Build
         run: go build -v .
 
+      - name: Test
+        run: go test -v service/*.go
 
