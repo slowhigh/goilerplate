@@ -13,8 +13,12 @@ import (
 )
 
 var (
-	videoService    service.VideoService       = service.New()
+	videoService service.VideoService = service.New()
+	loginService service.LoginService = service.NewLoginService()
+	jwtService   service.JWTService   = service.NewJWTService()
+
 	videoController controller.VideoController = controller.New(videoService)
+	loginController controller.LoginController = controller.NewLoginController(loginService, jwtService)
 )
 
 func setupLogOutput() {
@@ -27,23 +31,40 @@ func main() {
 
 	server := gin.New()
 
+	// Case-1
+	//server.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth(), gindump.Dump())
+	//apiRoutes := server.Group("/api")
+
+	// Case-2
+	//server.Use(gin.Recovery(), middlewares.Logger(), gindump.Dump())
+	//apiRoutes := server.Group("/api", middlewares.BasicAuth())
+
+	// Case-1 처럼하게 되면 아래 /view 경로일때도 middlewares.BasicAuth() 가 동작하여 id, pw를 입력해야 하지만,
+	// Case-2 처럼하게 되면 /api 일때만 middlewares.BasicAuth()가 동작하고
+	// 기존의 gin.Recovery(), middlewares.Logger(), gindump.Dump()는 모든 path("/api", "/view" 등)에 동일하게 적용된다.
+
+	server.Use(gin.Recovery(), middlewares.Logger(), gindump.Dump())
+
 	// region 프론트 앤드 영역 / 나중에 지우기
 	server.Static("/css", "./templates/css")
 
 	server.LoadHTMLGlob("templates/*.html")
 	// endregion
 
-	// Case-1
-	//server.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth(), gindump.Dump())
-	//apiRoutes := server.Group("/api")
+	// Login Endpoint: Authentication + Token creation
+	server.POST("/login", func(ctx *gin.Context) {
+		token := loginController.Login(ctx)
+		if token != "" {
+			ctx.JSON(http.StatusOK, gin.H{
+				"token": token,
+			})
+		} else {
+			ctx.JSON(http.StatusUnauthorized, nil)
+		}
+	})
 
-	// Case-1 처럼하게 되면 아래 /view 경로일때도 middlewares.BasicAuth() 가 동작하여 id, pw를 입력해야 하지만,
-	// Case-2 처럼하게 되면 /api 일때만 middlewares.BasicAuth()가 동작하고
-	// 기존의 gin.Recovery(), middlewares.Logger(), gindump.Dump()는 모든 path("/api", "/view" 등)에 동일하게 적용된다.
-
-	// Case-2
-	server.Use(gin.Recovery(), middlewares.Logger(), gindump.Dump())
-	apiRoutes := server.Group("/api", middlewares.BasicAuth())
+	// JWT Authorization Middleware applies to "/api" only.
+	apiRoutes := server.Group("/api", middlewares.AuthorizeJWT())
 	{
 		apiRoutes.GET("/videos", func(ctx *gin.Context) {
 			ctx.JSON(200, videoController.FindAll())
