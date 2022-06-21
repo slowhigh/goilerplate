@@ -1,11 +1,14 @@
 package entity
 
+import "time"
+
 // ShouldBindJSON 이기 때문에 json 형식을 적는것이다.
 type Person struct {
-	FirstName string `json:"firstname" binding:"required"` // "required" => 필수 항목을 의미함
-	LastName  string `json:"lastname" binding:"required"`
-	Age       int8   `json:"age" validate:"required,gte=1,lte=120"` // "gte"는 최소값, "lte"는 최대값, "gte=1,lte=130"는 1이상 100이하의 값
-	Email     string `json:"email" binding:"required,email"` // "email"은 이메일 형식 유효성
+	ID        uint64 `json:"id" gorm:"primary_key;auto_increment"`
+	FirstName string `json:"firstname" binding:"required" gorm:"type:varchar(32)"` // "required" => 필수 항목을 의미함
+	LastName  string `json:"lastname" binding:"required" gorm:"type:varchar(32)"`
+	Age       int8   `json:"age" validate:"required,gte=1,lte=120"`                   // "gte"는 최소값, "lte"는 최대값, "gte=1,lte=130"는 1이상 100이하의 값
+	Email     string `json:"email" binding:"required,email" gorm:"type:varchar(256)"` // "email"은 이메일 형식 유효성
 }
 
 // lt	: Less Than				(미만)
@@ -17,12 +20,16 @@ type Person struct {
 // 더 많은 참고 https://pkg.go.dev/github.com/go-playground/validator#hdr-Required
 
 type Video struct {
-	Title       string `json:"title" binding:"min=2,max=10" validate:"is-cool"` // "is-cool"이라는 이름의 사용자 유효성 검사 사용 video-controller.go 파일에 New메소드 참조
-	Description string `json:"description" binding:"max=20"` // "min"은 최소 길이, "max"는 최대 길이
-	URL         string `json:"url" binding:"required,url"` //"url"은 url 형식 유효성
-	Author      Person `json:"author" binding:"required"`
+	ID    uint64 `json:"id" gorm:"primary_key;auto_increment"`
+	Title string `json:"title" binding:"min=2,max=10" gorm:"type:varchar(10)"`
+	//Title       string `gorm:"type:varchar(10)" json:"title" binding:"min=2,max=10" validate:"is-cool"` // "is-cool"이라는 이름의 사용자 유효성 검사 사용 video-controller.go 파일에 New메소드 참조
+	Description string    `json:"description" binding:"max=20" gorm:"type:varchar(20)"`       // "min"은 최소 길이, "max"는 최대 길이
+	URL         string    `json:"url" binding:"required,url" gorm:"type:varchar(256);UNIQUE"` //"url"은 url 형식 유효성
+	Author      Person    `json:"author" binding:"required" gorm:"foreignkey:PersoneID"`
+	PersoneID   uint64    `json:"-"`
+	CreatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP"`
+	UpdatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP"`
 }
-
 
 // binding:"required,gte=1,lte=130" 도 작동하고 validate:"required,gte=1,lte=130" 도 작동한다. 왜 그럴까? 왜 둘다 사용할까? 두 방법의 차이는 무엇일까?
 // 아직 추측이지만 binding tag는 gin에서 지원하는 거고 validate tag는 validator에서 지원하는거 같다
