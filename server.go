@@ -19,6 +19,9 @@ var (
 	videoService service.VideoService = service.New(videoRepository)
 	loginService service.LoginService = service.NewLoginService()
 	jwtService   service.JWTService   = service.NewJWTService()
+	// service 객체를 각각의 controller에서 생성하지 않고 server에서 생성하는 이유는
+	// 해당 controller 외에 다른 controller에서 사용할 수도 있기 때문이다.
+	// 예를 들어 2종류의 service를 사용하는 controller가 있을 수도 있다.
 
 	videoController controller.VideoController = controller.New(videoService)
 	loginController controller.LoginController = controller.NewLoginController(loginService, jwtService)
@@ -71,10 +74,12 @@ func main() {
 	// JWT Authorization Middleware applies to "/api" only.
 	apiRoutes := server.Group("/api", middlewares.AuthorizeJWT())
 	{
+		// Create
 		apiRoutes.GET("/videos", func(ctx *gin.Context) {
 			ctx.JSON(200, videoController.FindAll())
 		})
 
+		// Read
 		apiRoutes.POST("/videos", func(ctx *gin.Context) {
 			err := videoController.Save(ctx)
 			if err != nil {
@@ -84,6 +89,7 @@ func main() {
 			}
 		})
 
+		// Update
 		apiRoutes.PUT("/videos/:id", func(ctx *gin.Context) {
 			err := videoController.Update(ctx)
 			if err != nil {
@@ -93,6 +99,7 @@ func main() {
 			}
 		})
 
+		// Delete
 		apiRoutes.DELETE("/videos/:id", func(ctx *gin.Context) {
 			err := videoController.Delete(ctx)
 			if err != nil {
@@ -101,6 +108,45 @@ func main() {
 				ctx.JSON(http.StatusOK, gin.H{"message": "Success!!"})
 			}
 		})
+
+		// // 이중 Route Group 방법
+		// videoGroup := apiRoutes.Group("/videos")
+		// {
+		// 	// Create
+		// 	videoGroup.GET("/", func(ctx *gin.Context) {
+		// 		ctx.JSON(200, videoController.FindAll())
+		// 	})
+
+		// 	// Read
+		// 	videoGroup.POST("/", func(ctx *gin.Context) {
+		// 		err := videoController.Save(ctx)
+		// 		if err != nil {
+		// 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		// 		} else {
+		// 			ctx.JSON(http.StatusOK, gin.H{"message": "Success!!"})
+		// 		}
+		// 	})
+
+		// 	// Update
+		// 	videoGroup.PUT("/:id", func(ctx *gin.Context) {
+		// 		err := videoController.Update(ctx)
+		// 		if err != nil {
+		// 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		// 		} else {
+		// 			ctx.JSON(http.StatusOK, gin.H{"message": "Success!!"})
+		// 		}
+		// 	})
+
+		// 	// Delete
+		// 	videoGroup.DELETE("/:id", func(ctx *gin.Context) {
+		// 		err := videoController.Delete(ctx)
+		// 		if err != nil {
+		// 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		// 		} else {
+		// 			ctx.JSON(http.StatusOK, gin.H{"message": "Success!!"})
+		// 		}
+		// 	})
+		// }
 	}
 
 	viewRoutes := server.Group("/view")
