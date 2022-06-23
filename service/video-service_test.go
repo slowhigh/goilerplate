@@ -2,26 +2,31 @@ package service
 
 import (
 	"testing"
-	"github.com/stretchr/testify/assert"
+
 	"github.com/someday-94/TypeGoMongo-Server/entity"
+	"github.com/someday-94/TypeGoMongo-Server/repository"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
-	TITLE = "Video Title"
+	TITLE       = "Video Title"
 	DESCRIPTION = "Video Description"
-	URL = "https://www.youtube.com/"
+	URL         = "https://www.youtube.com/"
 )
 
 func getVideo() entity.Video {
 	return entity.Video{
-		Title: TITLE,
+		Title:       TITLE,
 		Description: DESCRIPTION,
-		URL: URL,
+		URL:         URL,
 	}
 }
 
 func TestFindAll(t *testing.T) {
-	service := New()
+	videoRepository := repository.NewVideoRepository()
+	defer videoRepository.CloseDB()
+
+	service := New(videoRepository)
 
 	service.Save(getVideo())
 
@@ -30,6 +35,6 @@ func TestFindAll(t *testing.T) {
 	firstVideo := videos[0]
 	assert.NotNil(t, firstVideo)
 	assert.Equal(t, TITLE, firstVideo.Title)
-	assert.Equal(t,DESCRIPTION, firstVideo.Description)
+	assert.Equal(t, DESCRIPTION, firstVideo.Description)
 	assert.Equal(t, URL, firstVideo.URL)
 }
