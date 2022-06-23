@@ -66,3 +66,21 @@ Automated build-and-test steps triggered by CI ensure that code changes being me
 The code is then delivered quickly and seamlessly as a part of the CD process.
 In the software world, the CI/CD pipeline refers to the automation that enables incremental code changes from developers’ desktops to be delivered quickly and reliably to production.
 
+
+
+# Swagger Documentation
+
+## Install Swagger Library
+
+```
+$ go get -u github.com/swaggo/swag/cmd/swag
+
+# 1.16 or newer
+$ go install github.com/swaggo/swag/cmd/swag@latest
+```
+
+## Generate Swagger Documentation
+
+```
+$ swag init
+```
