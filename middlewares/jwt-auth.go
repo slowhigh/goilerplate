@@ -3,6 +3,7 @@ package middlewares
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		const BEARER_SCHEMA = "Bearer "
 		authHeader := ctx.GetHeader("Authorization")
 
-		if authHeader == "" || len(authHeader) < len(BEARER_SCHEMA) {
+		if authHeader == "" || !strings.Contains(authHeader, BEARER_SCHEMA) {
 			log.Println("Invaild Authorization Header")
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 		}
