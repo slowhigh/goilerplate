@@ -10,13 +10,16 @@ import (
 	"github.com/someday-94/TypeGoMongo-Server/middlewares"
 	"github.com/someday-94/TypeGoMongo-Server/repository"
 	"github.com/someday-94/TypeGoMongo-Server/service"
-
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 var (
-	videoRepository repository.VideoRepository = repository.NewVideoRepository()
+	database repository.Database = repository.NewRepository()
+
+
+
+	videoRepository repository.VideoRepository = repository.NewVideoRepository(database)
 
 	videoService service.VideoService = service.New(videoRepository)
 	loginService service.LoginService = service.NewLoginService()
@@ -39,9 +42,13 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	docs.SwaggerInfo.Schemes = []string{"http"}
 
-	defer videoRepository.CloseDB()
+	defer database.CloseDB()
 
 	server := gin.Default()
+
+	//server.GET("/", http.PlaygroundHandler())
+	//server.POST("query", http.GraphQLHandler())
+
 
 	videoAPI := api.NewVideoAPI(loginController, videoController)
 

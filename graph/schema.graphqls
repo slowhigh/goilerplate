@@ -1,0 +1,27 @@
+type Memo {
+    id: ID!
+    content: String!
+    author: User!
+}
+
+type User {
+    id: ID!
+    name: String!
+}
+
+type Query {
+    memos: [Memo!]!
+}
+
+input NewMemo {
+    content: String!
+    userId: String!
+}
+
+type Mutation {
+    createMemo(input: NewMemo!): Memo!
+}
+
+type Subscription {
+    memoAdded(repoFullName: String!): Memo
+}

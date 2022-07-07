@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/someday-94/TypeGoMongo-Server/entity"
 )
 
@@ -11,45 +9,34 @@ type VideoRepository interface {
 	Update(video entity.Video)
 	Delete(video entity.Video)
 	FindAll() []entity.Video
-	CloseDB()
 }
 
-type database struct {
-	connection *gorm.DB
+type videoRepository struct {
+	db Database
 }
 
-func NewVideoRepository() VideoRepository {
-	db, err := gorm.Open("sqlite3", "test.db")
-	if err != nil {
-		panic("Failed to connect database")
-	}
+func NewVideoRepository(db Database) VideoRepository {
 	db.AutoMigrate(&entity.Video{}, &entity.Person{})
-	return &database {
-		connection: db,
+	
+	return &videoRepository{
+		db: db,
 	}
 }
 
-func (db *database) CloseDB() {
-	err := db.connection.Close()
-	if err != nil {
-		panic("Failed to close database")
-	}
+func (videoRepo *videoRepository) Save(video entity.Video) {
+	videoRepo.db.conn.Create(&video)
 }
 
-func (db *database) Save(video entity.Video) {
-	db.connection.Create(&video)
+func (videoRepo *videoRepository) Update(video entity.Video) {
+	videoRepo.db.conn.Save(&video)
 }
 
-func (db *database) Update(video entity.Video) {
-	db.connection.Save(&video)
+func (videoRepo *videoRepository) Delete(video entity.Video) {
+	videoRepo.db.conn.Delete(&video)
 }
 
-func (db *database) Delete(video entity.Video) {
-	db.connection.Delete(&video)
-}
-
-func (db *database) FindAll() []entity.Video {
+func (videoRepo *videoRepository) FindAll() []entity.Video {
 	var videos []entity.Video
-	db.connection.Set("gorm:auto_preload", true).Find(&videos)
+	videoRepo.db.conn.Set("gorm:auto_preload", true).Find(&videos)
 	return videos
 }
