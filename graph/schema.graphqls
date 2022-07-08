@@ -11,6 +11,7 @@ type User {
 
 type Query {
     memos: [Memo!]!
+    users: [User!]!
 }
 
 input NewMemo {

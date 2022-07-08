@@ -7,8 +7,14 @@ import (
 
 type Database interface {
 	//OpenDB()
+	
 	CloseDB()
-	AutoMigrate(values ...interface{})
+	AutoMigrate(...interface{})
+
+	Create(interface{})
+	Save(interface{})
+	Delete(interface{})
+	FindAll(interface{})
 }
 
 type database struct {
@@ -35,6 +41,10 @@ func NewRepository() Database {
 // 	db.conn = con
 // }
 
+func (db *database) AutoMigrate(values ...interface{}) {
+	db.conn.AutoMigrate(values...)
+}
+
 func (db *database) CloseDB() {
 	err := db.conn.Close()
 	if err != nil {
@@ -44,6 +54,18 @@ func (db *database) CloseDB() {
 	db.conn = nil
 }
 
-func (db *database) AutoMigrate(values ...interface{}) {
-	db.conn.AutoMigrate(values)
+func (db *database) Create(value interface{}) {
+	db.conn.Create(value)
+}
+
+func (db *database) Save(value interface{}) {
+	db.conn.Save(value)
+}
+
+func (db *database) Delete(value interface{}) {
+	db.conn.Delete(value)
+}
+
+func (db *database) FindAll(value interface{}) {
+	db.conn.Set("gorm:auto_preload", true).Find(value)
 }

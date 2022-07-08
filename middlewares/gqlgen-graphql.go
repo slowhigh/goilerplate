@@ -1,7 +1,6 @@
-package http
+package middlewares
 
 import (
-	_ "github.com/99designs/gqlgen"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
@@ -11,7 +10,7 @@ import (
 
 func PlaygroundHandler() gin.HandlerFunc {
 	h := playground.Handler("GraphQL playground", "/query")
-	return func(c *gin.Context)  {
+	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
 }

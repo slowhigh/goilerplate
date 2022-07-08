@@ -8,14 +8,14 @@ type MemoRepository interface {
 	Save(memo model.Memo)
 	Update(memo model.Memo)
 	Delete(memo model.Memo)
-	FindAll() []model.Memo
+	FindAll() []*model.Memo
 }
 
 type memoRepository struct {
-	db *database
+	db Database
 }
 
-func NewMemoRepository(db *database) MemoRepository {
+func NewMemoRepository(db Database) MemoRepository {
 	db.AutoMigrate(&model.Memo{}, &model.User{})
 
 	return &memoRepository{
@@ -24,19 +24,25 @@ func NewMemoRepository(db *database) MemoRepository {
 }
 
 func (memoRepo *memoRepository) Save(memo model.Memo) {
-	memoRepo.db.conn.Create(&memo)
+	memoRepo.db.Create(&memo)
 }
 
 func (memoRepo *memoRepository) Update(memo model.Memo) {
-	memoRepo.db.conn.Save(&memo)
+	memoRepo.db.Save(&memo)
 }
 
 func (memoRepo *memoRepository) Delete(memo model.Memo) {
-	memoRepo.db.conn.Delete(&memo)
+	memoRepo.db.Delete(&memo)
 }
 
-func (memoRepo *memoRepository) FindAll() []model.Memo {
+func (memoRepo *memoRepository) FindAll() []*model.Memo {
 	var memos []model.Memo
-	memoRepo.db.conn.Set("gorm:auto_preload", true).Find(&memos)
-	return memos
+	memoRepo.db.FindAll(&memos)
+
+	var results []*model.Memo
+	for _, m := range memos {
+		results = append(results, &m)
+	}
+
+	return results
 }

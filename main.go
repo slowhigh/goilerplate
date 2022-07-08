@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-
+	
 	"github.com/gin-gonic/gin"
 	"github.com/someday-94/TypeGoMongo-Server/api"
 	"github.com/someday-94/TypeGoMongo-Server/controller"
@@ -16,9 +16,6 @@ import (
 
 var (
 	database repository.Database = repository.NewRepository()
-
-
-
 	videoRepository repository.VideoRepository = repository.NewVideoRepository(database)
 
 	videoService service.VideoService = service.New(videoRepository)
@@ -46,8 +43,8 @@ func main() {
 
 	server := gin.Default()
 
-	//server.GET("/", http.PlaygroundHandler())
-	//server.POST("query", http.GraphQLHandler())
+	server.GET("/", middlewares.PlaygroundHandler())
+	server.POST("query", middlewares.GraphQLHandler())
 
 
 	videoAPI := api.NewVideoAPI(loginController, videoController)

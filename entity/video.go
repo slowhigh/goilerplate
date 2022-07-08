@@ -25,8 +25,8 @@ type Video struct {
 	//Title       string `gorm:"type:varchar(10)" json:"title" binding:"min=2,max=10" validate:"is-cool"` // "is-cool"이라는 이름의 사용자 유효성 검사 사용 video-controller.go 파일에 New메소드 참조
 	Description string    `json:"description" binding:"max=20" gorm:"type:varchar(20)"`       // "min"은 최소 길이, "max"는 최대 길이
 	URL         string    `json:"url" binding:"required,url" gorm:"type:varchar(256);UNIQUE"` //"url"은 url 형식 유효성
-	Author      Person    `json:"author" binding:"required" gorm:"foreignkey:PersoneID"`
-	PersoneID   uint64    `json:"-"`
+	Author      Person    `json:"author" binding:"required" gorm:"foreignkey:PersonID"`
+	PersonID   uint64    `json:"-"`
 	CreatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP"`
 }

@@ -24,19 +24,19 @@ func NewVideoRepository(db Database) VideoRepository {
 }
 
 func (videoRepo *videoRepository) Save(video entity.Video) {
-	videoRepo.db.conn.Create(&video)
+	videoRepo.db.Create(&video)
 }
 
 func (videoRepo *videoRepository) Update(video entity.Video) {
-	videoRepo.db.conn.Save(&video)
+	videoRepo.db.Save(&video)
 }
 
 func (videoRepo *videoRepository) Delete(video entity.Video) {
-	videoRepo.db.conn.Delete(&video)
+	videoRepo.db.Delete(&video)
 }
 
 func (videoRepo *videoRepository) FindAll() []entity.Video {
 	var videos []entity.Video
-	videoRepo.db.conn.Set("gorm:auto_preload", true).Find(&videos)
+	videoRepo.db.FindAll(&videos)
 	return videos
 }
