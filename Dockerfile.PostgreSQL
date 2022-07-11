@@ -1,0 +1,9 @@
+FROM postgres:latest
+
+LABEL maintainer="someday"
+
+ENV POSTGRES_PASSWORD=1234 \
+    PORT=5432 \
+    POSTGRES_DB=yt_go_auth
+
+EXPOSE $PORT

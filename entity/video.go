@@ -1,7 +1,5 @@
 package entity
 
-import "time"
-
 // ShouldBindJSON 이기 때문에 json 형식을 적는것이다.
 type Person struct {
 	ID        uint64 `json:"id" gorm:"primary_key;auto_increment"`
@@ -27,8 +25,6 @@ type Video struct {
 	URL         string    `json:"url" binding:"required,url" gorm:"type:varchar(256);UNIQUE"` //"url"은 url 형식 유효성
 	Author      Person    `json:"author" binding:"required" gorm:"foreignkey:PersonID"`
 	PersonID   uint64    `json:"-"`
-	CreatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP"`
-	UpdatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP"`
 }
 
 // binding:"required,gte=1,lte=130" 도 작동하고 validate:"required,gte=1,lte=130" 도 작동한다. 왜 그럴까? 왜 둘다 사용할까? 두 방법의 차이는 무엇일까?

@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	database repository.Database = repository.NewRepository()
+	database repository.Database = repository.NewPostgreSQL()
 	videoRepository repository.VideoRepository = repository.NewVideoRepository(database)
 
 	videoService service.VideoService = service.New(videoRepository)
