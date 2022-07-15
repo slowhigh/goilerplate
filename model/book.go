@@ -13,6 +13,6 @@ type User struct {
 type Memo struct {
 	ID      string `json:"id" bson:"_id" gorm:"primary_key"`
 	Content string `json:"content" gorm:"type:varchar(512)"`
-	Author  User   `json:"author" gorm:"foreignkey:UserID"`
+	Author  *User  `json:"author" gorm:"foreignkey:UserID"`
 	UserID  string `json:"-"`
 }

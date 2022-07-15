@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/someday-94/TypeGoMongo-Server/graph/model"
+	"github.com/someday-94/TypeGoMongo-Server/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -297,7 +297,7 @@ func (ec *executionContext) field_Mutation_createMemo_args(ctx context.Context, 
 	var arg0 model.NewMemo
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐNewMemo(ctx, tmp)
+		arg0, err = ec.unmarshalNNewMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐNewMemo(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -490,7 +490,7 @@ func (ec *executionContext) _Memo_author(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(model.User)
 	fc.Result = res
-	return ec.marshalNUser2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Memo_author(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -540,7 +540,7 @@ func (ec *executionContext) _Mutation_createMemo(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Memo)
 	fc.Result = res
-	return ec.marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemo(ctx, field.Selections, res)
+	return ec.marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createMemo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -603,7 +603,7 @@ func (ec *executionContext) _Query_memos(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Memo)
 	fc.Result = res
-	return ec.marshalNMemo2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemoᚄ(ctx, field.Selections, res)
+	return ec.marshalNMemo2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemoᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_memos(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -655,7 +655,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -839,7 +839,7 @@ func (ec *executionContext) _Subscription_memoAdded(ctx context.Context, field g
 				w.Write([]byte{'{'})
 				graphql.MarshalString(field.Alias).MarshalGQL(w)
 				w.Write([]byte{':'})
-				ec.marshalOMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemo(ctx, field.Selections, res).MarshalGQL(w)
+				ec.marshalOMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemo(ctx, field.Selections, res).MarshalGQL(w)
 				w.Write([]byte{'}'})
 			})
 		case <-ctx.Done():
@@ -3357,11 +3357,11 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) marshalNMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemo(ctx context.Context, sel ast.SelectionSet, v model.Memo) graphql.Marshaler {
+func (ec *executionContext) marshalNMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemo(ctx context.Context, sel ast.SelectionSet, v model.Memo) graphql.Marshaler {
 	return ec._Memo(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMemo2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Memo) graphql.Marshaler {
+func (ec *executionContext) marshalNMemo2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Memo) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3385,7 +3385,7 @@ func (ec *executionContext) marshalNMemo2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTyp
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemo(ctx, sel, v[i])
+			ret[i] = ec.marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3405,7 +3405,7 @@ func (ec *executionContext) marshalNMemo2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTyp
 	return ret
 }
 
-func (ec *executionContext) marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemo(ctx context.Context, sel ast.SelectionSet, v *model.Memo) graphql.Marshaler {
+func (ec *executionContext) marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemo(ctx context.Context, sel ast.SelectionSet, v *model.Memo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3415,7 +3415,7 @@ func (ec *executionContext) marshalNMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGo
 	return ec._Memo(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNewMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐNewMemo(ctx context.Context, v interface{}) (model.NewMemo, error) {
+func (ec *executionContext) unmarshalNNewMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐNewMemo(ctx context.Context, v interface{}) (model.NewMemo, error) {
 	res, err := ec.unmarshalInputNewMemo(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3435,11 +3435,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3463,7 +3463,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTyp
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3483,7 +3483,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsomedayᚑ94ᚋTyp
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3772,7 +3772,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋgraphᚋmodelᚐMemo(ctx context.Context, sel ast.SelectionSet, v *model.Memo) graphql.Marshaler {
+func (ec *executionContext) marshalOMemo2ᚖgithubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐMemo(ctx context.Context, sel ast.SelectionSet, v *model.Memo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/someday-94/TypeGoMongo-Server/graph/model"
+	"github.com/someday-94/TypeGoMongo-Server/model"
 )
 
 type MemoRepository interface {

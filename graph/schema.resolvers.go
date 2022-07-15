@@ -10,41 +10,39 @@ import (
 	"strconv"
 
 	"github.com/someday-94/TypeGoMongo-Server/graph/generated"
-	"github.com/someday-94/TypeGoMongo-Server/graph/model"
+	"github.com/someday-94/TypeGoMongo-Server/model"
 	"github.com/someday-94/TypeGoMongo-Server/repository"
 )
 
 var (
-	database       repository.Database       = repository.NewRepository()
-	memoRepository repository.MemoRepository = repository.NewMemoRepository(database)
-	userRepository repository.UserRepository = repository.NewUserRepository(database)
+	memoRepo repository.MongoRepo = repository.NewMongoRepo()
 )
 
 // CreateMemo is the resolver for the createMemo field.
 func (r *mutationResolver) CreateMemo(ctx context.Context, input model.NewMemo) (*model.Memo, error) {
-	user := model.User{
+	user := &model.User{
 		ID:   input.UserId,
 		Name: "user-" + input.UserId,
 	}
-	memo := model.Memo{
+	memo := &model.Memo{
 		ID:      strconv.Itoa(rand.Int()),
 		Content: input.Content,
 		Author:  user,
 	}
 
-	memoRepository.Save(memo)
+	memoRepo.Save(memo)
 
-	return &memo, nil
+	return memo, nil
 }
 
 // Memos is the resolver for the memos field.
 func (r *queryResolver) Memos(ctx context.Context) ([]*model.Memo, error) {
-	return memoRepository.FindAll(), nil
+	return memoRepo.FindAll(), nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	return userRepository.FindAll(), nil
+	panic(fmt.Errorf("not implemented"))
 }
 
 // MemoAdded is the resolver for the memoAdded field.
