@@ -16,13 +16,16 @@ import (
 
 var (
 	memoRepo repository.MongoRepo = repository.NewMongoRepo()
+
+	//db repository.PostgreSQL = repository.NewPostgreSQL()
+	//memoRepo repository.MemoRepository = repository.NewMemoRepository(db)
 )
 
 // CreateMemo is the resolver for the createMemo field.
 func (r *mutationResolver) CreateMemo(ctx context.Context, input model.NewMemo) (*model.Memo, error) {
 	user := &model.User{
-		ID:   input.UserId,
-		Name: "user-" + input.UserId,
+		ID:   input.UserID,
+		Name: "user-" + input.UserID,
 	}
 	memo := &model.Memo{
 		ID:      strconv.Itoa(rand.Int()),
@@ -30,7 +33,7 @@ func (r *mutationResolver) CreateMemo(ctx context.Context, input model.NewMemo) 
 		Author:  user,
 	}
 
-	memoRepo.Save(memo)
+	memoRepo.Create(memo)
 
 	return memo, nil
 }

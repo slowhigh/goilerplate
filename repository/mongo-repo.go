@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+
 	//"os"
 	"time"
 
@@ -14,8 +15,9 @@ import (
 )
 
 type MongoRepo interface {
-	Save(memo *model.Memo)
+	Create(memo *model.Memo)
 	FindAll() []*model.Memo
+
 }
 
 type mongoRepo struct {
@@ -45,6 +47,14 @@ func NewMongoRepo() MongoRepo {
 		log.Fatal(err)
 	}
 
+	// Check the connection
+	err = dbClient.Ping(ctx, nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+
 	fmt.Println("Connected to MongoDB")
 
 	return &mongoRepo{
@@ -52,7 +62,7 @@ func NewMongoRepo() MongoRepo {
 	}
 }
 
-func (m *mongoRepo) Save(memo *model.Memo) {
+func (m *mongoRepo) Create(memo *model.Memo) {
 	collection := m.client.Database(DATABASE).Collection(COLLECTION)
 	_, err := collection.InsertOne(context.TODO(), memo)
 

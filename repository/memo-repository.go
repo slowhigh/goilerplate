@@ -5,7 +5,7 @@ import (
 )
 
 type MemoRepository interface {
-	Save(memo model.Memo)
+	Save(memo *model.Memo)
 	Update(memo model.Memo)
 	Delete(memo model.Memo)
 	FindAll() []*model.Memo
@@ -13,6 +13,8 @@ type MemoRepository interface {
 
 type memoRepository struct {
 	db Database
+	databaseName string
+	collectionName string
 }
 
 func NewMemoRepository(db Database) MemoRepository {
@@ -23,8 +25,8 @@ func NewMemoRepository(db Database) MemoRepository {
 	}
 }
 
-func (memoRepo *memoRepository) Save(memo model.Memo) {
-	memoRepo.db.Create(&memo)
+func (memoRepo *memoRepository) Save(memo *model.Memo) {
+	memoRepo.db.Create(memo)
 }
 
 func (memoRepo *memoRepository) Update(memo model.Memo) {
