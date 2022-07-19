@@ -1,50 +1,58 @@
 package repository
 
 import (
+	"log"
+
 	"github.com/someday-94/TypeGoMongo-Server/model"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type MemoRepository interface {
-	Save(memo *model.Memo)
+	Save(memo model.Memo)
 	Update(memo model.Memo)
 	Delete(memo model.Memo)
 	FindAll() []*model.Memo
 }
 
 type memoRepository struct {
-	db Database
-	databaseName string
+	dbConn MongoDB
+	dbName string
 	collectionName string
 }
 
-func NewMemoRepository(db Database) MemoRepository {
-	db.AutoMigrate(&model.Memo{}, &model.User{})
-
+func NewMemoRepository(dbConn MongoDB, dbName string, collectionName string) MemoRepository {
 	return &memoRepository{
-		db: db,
+		dbConn: dbConn,
+		dbName: dbName,
+		collectionName: collectionName,
 	}
 }
 
-func (memoRepo *memoRepository) Save(memo *model.Memo) {
-	memoRepo.db.Create(memo)
+func (memoRepo *memoRepository) Save(memo model.Memo) {
+	memoRepo.dbConn.InsertOne(memoRepo.dbName, memoRepo.collectionName, memo)
 }
 
 func (memoRepo *memoRepository) Update(memo model.Memo) {
-	memoRepo.db.Save(&memo)
+	memoRepo.dbConn.UpdateByID(memoRepo.dbName, memoRepo.collectionName, memo.ID, memo)
 }
 
 func (memoRepo *memoRepository) Delete(memo model.Memo) {
-	memoRepo.db.Delete(&memo)
+	memoRepo.dbConn.DeleteOne(memoRepo.dbName, memoRepo.collectionName, model.Memo{ ID: memo.ID })
 }
 
 func (memoRepo *memoRepository) FindAll() []*model.Memo {
-	var memos []model.Memo
-	memoRepo.db.FindAll(&memos)
+	result, err := memoRepo.dbConn.Find(memoRepo.dbName, memoRepo.collectionName, bson.D{})
 
-	var results []*model.Memo
-	for _, m := range memos {
-		results = append(results, &m)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	return results
+	for v := range result {
+		memo, err := v.(*model.Memo)
+		
+	}
+
+
+	con, err := []*model.Memo(result)
+
 }

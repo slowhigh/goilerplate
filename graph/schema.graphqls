@@ -21,6 +21,8 @@ input NewMemo {
 
 type Mutation {
     createMemo(input: NewMemo!): Memo!
+    deleteMemo(id: ID!): Memo!
+    updateMemo(id: ID!, new: NewMemo!): Memo!
 }
 
 type Subscription {

@@ -11,14 +11,6 @@ import (
 
 	"github.com/someday-94/TypeGoMongo-Server/graph/generated"
 	"github.com/someday-94/TypeGoMongo-Server/model"
-	"github.com/someday-94/TypeGoMongo-Server/repository"
-)
-
-var (
-	memoRepo repository.MongoRepo = repository.NewMongoRepo()
-
-	//db repository.PostgreSQL = repository.NewPostgreSQL()
-	//memoRepo repository.MemoRepository = repository.NewMemoRepository(db)
 )
 
 // CreateMemo is the resolver for the createMemo field.
@@ -36,6 +28,16 @@ func (r *mutationResolver) CreateMemo(ctx context.Context, input model.NewMemo) 
 	memoRepo.Create(memo)
 
 	return memo, nil
+}
+
+// DeleteMemo is the resolver for the deleteMemo field.
+func (r *mutationResolver) DeleteMemo(ctx context.Context, id string) (*model.Memo, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// UpdateMemo is the resolver for the updateMemo field.
+func (r *mutationResolver) UpdateMemo(ctx context.Context, id string, new model.NewMemo) (*model.Memo, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Memos is the resolver for the memos field.
