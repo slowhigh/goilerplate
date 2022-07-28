@@ -25,14 +25,17 @@ func (r *mutationResolver) CreateMemo(ctx context.Context, input model.NewMemo) 
 		Author:  user,
 	}
 
-	memoRepo.Create(memo)
+	r.memoRepo.Save(memo)
 
 	return memo, nil
 }
 
 // DeleteMemo is the resolver for the deleteMemo field.
 func (r *mutationResolver) DeleteMemo(ctx context.Context, id string) (*model.Memo, error) {
-	panic(fmt.Errorf("not implemented"))
+
+
+
+	return r.memoRepo.DeleteById(id), nil
 }
 
 // UpdateMemo is the resolver for the updateMemo field.
@@ -42,7 +45,7 @@ func (r *mutationResolver) UpdateMemo(ctx context.Context, id string, new model.
 
 // Memos is the resolver for the memos field.
 func (r *queryResolver) Memos(ctx context.Context) ([]*model.Memo, error) {
-	return memoRepo.FindAll(), nil
+	return r.memoRepo.FindAll(), nil
 }
 
 // Users is the resolver for the users field.

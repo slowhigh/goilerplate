@@ -6,7 +6,6 @@ import (
 )
 
 type PostgreSQL interface {
-	CloseDB()
 	AutoMigrate(...interface{})
 
 	Create(interface{})
@@ -34,15 +33,6 @@ func NewPostgreSQL() PostgreSQL {
 
 func (db *postgreSQL) AutoMigrate(values ...interface{}) {
 	db.conn.AutoMigrate(values...)
-}
-
-func (db *postgreSQL) CloseDB() {
-	// err := db.conn.
-	// if err != nil {
-	// 	panic("Failed to close postgreSQL")
-	// }
-
-	// db.conn = nil
 }
 
 func (db *postgreSQL) Create(value interface{}) {

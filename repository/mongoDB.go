@@ -6,24 +6,24 @@ import (
 	"log"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type MongoDB interface {
-	InsertOne(dbName string, collectionName string, document interface{}) (*mongo.InsertOneResult, error)
-	InsertMany(dbName string, collectionName string, documents []interface{}) (*mongo.InsertManyResult, error)
-	FindOne(dbName string, collectionName string, filter interface{}) *mongo.SingleResult
-	Find(dbName string, collectionName string, filter interface{}) ([]*interface{}, error)
-	UpdateByID(dbName string, collectionName string, id interface{}, update interface{}) (*mongo.UpdateResult, error)
-	UpdateOne(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error)
-	UpdateMany(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error)
-	DeleteOne(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error)
-	DeleteMany(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error)
-}
+// type MongoDB interface {
+// 	InsertOne(dbName string, collectionName string, document interface{}) (*mongo.InsertOneResult, error)
+// 	InsertMany(dbName string, collectionName string, documents []interface{}) (*mongo.InsertManyResult, error)
+// 	FindOne(dbName string, collectionName string, filter interface{}) *mongo.SingleResult
+// 	Find(dbName string, collectionName string, filter interface{}) (*mongo.Cursor, error)
+// 	UpdateByID(dbName string, collectionName string, id interface{}, update interface{}) (*mongo.UpdateResult, error)
+// 	UpdateOne(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error)
+// 	UpdateMany(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error)
+// 	DeleteOne(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error)
+// 	DeleteMany(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error)
+// 	FindOneAndDelete(dbName string, collectionName string, filter interface{}) *mongo.SingleResult
+// }
 
-type mongoDB struct {
+type MongoDB struct {
 	client *mongo.Client
 }
 
@@ -59,31 +59,9 @@ func NewMongoDB(host, port, id, pw string) MongoDB {
 	}
 }
 
-func (db *mongoDB) InsertOne(dbName string, collectionName string, document interface{}) ([]*interface{}, error) {
+func (db *mongoDB) InsertOne(dbName string, collectionName string, document interface{}) (*mongo.InsertOneResult, error) {
 	collection := db.client.Database(dbName).Collection(collectionName)
-	//return collection.InsertOne(context.TODO(), document)
-
-	cursor, err := collection.Find(context.TODO(), bson.D{})
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer cursor.Close(context.TODO())
-
-	var result []*interface{}
-	for cursor.Next(context.TODO()) {
-		var v *interface{}
-		err := cursor.Decode(&v)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		result = append(result, v)
-	}
-
-	return result, nil
+	return collection.InsertOne(context.TODO(), document)
 }
 
 func (db *mongoDB) InsertMany(dbName string, collectionName string, documents []interface{}) (*mongo.InsertManyResult, error) {
@@ -119,6 +97,11 @@ func (db *mongoDB) UpdateMany(dbName string, collectionName string, filter inter
 func (db *mongoDB) DeleteOne(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error) {
 	collection := db.client.Database(dbName).Collection(collectionName)
 	return collection.DeleteOne(context.TODO(), filter)
+}
+
+func (db *mongoDB) FindOneAndDelete(dbName string, collectionName string, filter interface{}) *mongo.SingleResult {
+	collection := db.client.Database(dbName).Collection(collectionName)
+	return collection.FindOneAndDelete(context.TODO(), filter)
 }
 
 func (db *mongoDB) DeleteMany(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error) {
