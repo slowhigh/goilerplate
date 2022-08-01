@@ -55,7 +55,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CreateMemo func(childComplexity int, input model.NewMemo) int
 		DeleteMemo func(childComplexity int, id string) int
-		UpdateMemo func(childComplexity int, id string, new model.NewMemo) int
+		UpdateMemo func(childComplexity int, id string, input string) int
 	}
 
 	Query struct {
@@ -76,7 +76,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateMemo(ctx context.Context, input model.NewMemo) (*model.Memo, error)
 	DeleteMemo(ctx context.Context, id string) (*model.Memo, error)
-	UpdateMemo(ctx context.Context, id string, new model.NewMemo) (*model.Memo, error)
+	UpdateMemo(ctx context.Context, id string, input string) (*model.Memo, error)
 }
 type QueryResolver interface {
 	Memos(ctx context.Context) ([]*model.Memo, error)
@@ -156,7 +156,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateMemo(childComplexity, args["id"].(string), args["new"].(model.NewMemo)), true
+		return e.complexity.Mutation.UpdateMemo(childComplexity, args["id"].(string), args["input"].(string)), true
 
 	case "Query.memos":
 		if e.complexity.Query.Memos == nil {
@@ -308,7 +308,7 @@ input NewMemo {
 type Mutation {
     createMemo(input: NewMemo!): Memo!
     deleteMemo(id: ID!): Memo!
-    updateMemo(id: ID!, new: NewMemo!): Memo!
+    updateMemo(id: ID!, input: String!): Memo!
 }
 
 type Subscription {
@@ -363,15 +363,15 @@ func (ec *executionContext) field_Mutation_updateMemo_args(ctx context.Context, 
 		}
 	}
 	args["id"] = arg0
-	var arg1 model.NewMemo
-	if tmp, ok := rawArgs["new"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("new"))
-		arg1, err = ec.unmarshalNNewMemo2githubᚗcomᚋsomedayᚑ94ᚋTypeGoMongoᚑServerᚋmodelᚐNewMemo(ctx, tmp)
+	var arg1 string
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["new"] = arg1
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -721,7 +721,7 @@ func (ec *executionContext) _Mutation_updateMemo(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateMemo(rctx, fc.Args["id"].(string), fc.Args["new"].(model.NewMemo))
+		return ec.resolvers.Mutation().UpdateMemo(rctx, fc.Args["id"].(string), fc.Args["input"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

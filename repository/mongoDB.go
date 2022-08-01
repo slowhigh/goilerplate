@@ -10,24 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// type MongoDB interface {
-// 	InsertOne(dbName string, collectionName string, document interface{}) (*mongo.InsertOneResult, error)
-// 	InsertMany(dbName string, collectionName string, documents []interface{}) (*mongo.InsertManyResult, error)
-// 	FindOne(dbName string, collectionName string, filter interface{}) *mongo.SingleResult
-// 	Find(dbName string, collectionName string, filter interface{}) (*mongo.Cursor, error)
-// 	UpdateByID(dbName string, collectionName string, id interface{}, update interface{}) (*mongo.UpdateResult, error)
-// 	UpdateOne(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error)
-// 	UpdateMany(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error)
-// 	DeleteOne(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error)
-// 	DeleteMany(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error)
-// 	FindOneAndDelete(dbName string, collectionName string, filter interface{}) *mongo.SingleResult
-// }
-
 type MongoDB struct {
 	client *mongo.Client
 }
 
-func NewMongoDB(host, port, id, pw string) MongoDB {
+func NewMongoDB(host, port, id, pw string) *MongoDB {
 
 	//mongodb+srv://USERNAME:PASSWORD@HOST:PORT
 	//MONGODB := os.Getenv("MONGODB")
@@ -54,57 +41,11 @@ func NewMongoDB(host, port, id, pw string) MongoDB {
 
 	fmt.Println("Connected to MongoDB")
 
-	return &mongoDB{
+	return &MongoDB{
 		client: dbClient,
 	}
 }
 
-func (db *mongoDB) InsertOne(dbName string, collectionName string, document interface{}) (*mongo.InsertOneResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.InsertOne(context.TODO(), document)
-}
-
-func (db *mongoDB) InsertMany(dbName string, collectionName string, documents []interface{}) (*mongo.InsertManyResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.InsertMany(context.TODO(), documents)
-}
-
-func (db *mongoDB) FindOne(dbName string, collectionName string, filter interface{}) *mongo.SingleResult {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.FindOne(context.TODO(), filter)
-}
-
-func (db *mongoDB) Find(dbName string, collectionName string, filter interface{}) (*mongo.Cursor, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.Find(context.TODO(), filter)
-}
-
-func (db *mongoDB) UpdateByID(dbName string, collectionName string, id interface{}, update interface{}) (*mongo.UpdateResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.UpdateByID(context.TODO(), id, update)
-}
-
-func (db *mongoDB) UpdateOne(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.UpdateOne(context.TODO(), filter, update)
-}
-
-func (db *mongoDB) UpdateMany(dbName string, collectionName string, filter interface{}, update interface{}) (*mongo.UpdateResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.UpdateMany(context.TODO(), filter, update)
-}
-
-func (db *mongoDB) DeleteOne(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.DeleteOne(context.TODO(), filter)
-}
-
-func (db *mongoDB) FindOneAndDelete(dbName string, collectionName string, filter interface{}) *mongo.SingleResult {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.FindOneAndDelete(context.TODO(), filter)
-}
-
-func (db *mongoDB) DeleteMany(dbName string, collectionName string, filter interface{}) (*mongo.DeleteResult, error) {
-	collection := db.client.Database(dbName).Collection(collectionName)
-	return collection.DeleteMany(context.TODO(), filter)
+func (mongoDB *MongoDB) Close() {
+	mongoDB.client.Disconnect(context.TODO())
 }
