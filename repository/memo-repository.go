@@ -2,74 +2,89 @@ package repository
 
 import (
 	"context"
-	"log"
 
 	"github.com/someday-94/TypeGoMongo-Server/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type MemoRepository interface {
-	InsertOne(memo *model.Memo)
-	Update(memo *model.Memo)
-	DeleteById(id string) *model.Memo
-	FindAll() []*model.Memo
-}
-
-type memoRepository struct {
+type MemoRepository struct {
 	collection *mongo.Collection
 }
 
-func NewMemoRepository(dbConn *MongoDB, dbName string, collectionName string) MemoRepository {
-	return &memoRepository{
-		collection: dbConn.client.Database(dbName).Collection(collectionName),
+func NewMemoRepository(dbConn *MongoDB) *MemoRepository {
+	return &MemoRepository{
+		collection: dbConn.client.Database("graphql").Collection("memos"),
 	}
 }
 
-func (memoRepo *memoRepository) InsertOne(memo *model.Memo) {
-	memoRepo.collection.InsertOne(context.TODO(), memo)
-}
-
-func (memoRepo *memoRepository) Update(memo *model.Memo) {
-	_, err := memoRepo.collection.UpdateByID(context.TODO(), memo.ID, memo)
+func (memoRepo *MemoRepository) InsertOne(memo *model.Memo) {
+	res, err := memoRepo.collection.InsertOne(context.TODO(), memo)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
+	}
+
+	if memo.ID != res.InsertedID.(string) {
+		panic("Invalid insertedID")
 	}
 }
 
-func (memoRepo *memoRepository) DeleteById(id string) *model.Memo {
+func (memoRepo *MemoRepository) UpdateByID(id string, memo *model.Memo) {
+	update := bson.M{"$set": memo}
+
+	res, err := memoRepo.collection.UpdateByID(context.TODO(), id, update)
+	if err != nil {
+		panic(err)
+	}
+
+	if res.MatchedCount != 1 || res.ModifiedCount != 1 {
+		panic("Not found matched id")
+	}
+}
+
+func (memoRepo *MemoRepository) DeleteById(id string) *model.Memo {
 	var memo *model.Memo
 
-	result := memoRepo.collection.FindOneAndDelete(context.TODO(), model.Memo{ID: id})
-	result.Decode(memo)
+	res := memoRepo.collection.FindOneAndDelete(context.TODO(), bson.M{"_id": id})
+	if err := res.Err(); err != nil {
+		panic(err)
+	}
+
+	if err := res.Decode(&memo); err != nil {
+		panic(err)
+	}
 
 	return memo
 }
 
-func (memoRepo *memoRepository) FindAll() []*model.Memo {
+func (memoRepo *MemoRepository) FindAll() []*model.Memo {
 	memos := make([]*model.Memo, 0)
 
-	result, err := memoRepo.collection.Find(context.TODO(), bson.D{})
+	result, err := memoRepo.collection.Find(context.TODO(), bson.M{})
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	defer result.Close(context.TODO())
 	if err = result.All(context.TODO(), &memos); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	return memos
 }
 
-func (memoRepo *memoRepository) FindOneById(id string) *model.Memo {
+func (memoRepo *MemoRepository) FindOneById(id string) *model.Memo {
 	var memo *model.Memo
 
-	result := memoRepo.collection.FindOne(context.TODO(), model.Memo {
-		ID: id,
-	})
+	res := memoRepo.collection.FindOne(context.TODO(), bson.M{"_id": id})
 
-	result.Decode(memo)
+	if err := res.Err(); err != nil {
+		panic(err)
+	}
+
+	if err := res.Decode(&memo); err != nil {
+		panic(err)
+	}
 
 	return memo
 }
