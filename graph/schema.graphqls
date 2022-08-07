@@ -4,23 +4,35 @@ type Memo {
     author: User!
 }
 
+input MemoInput {
+    content: String!
+    author: UserInput!
+}
+
 type User {
     id: ID!
     name: String!
 }
 
+input UserInput {
+    name: String!
+}
+
 type Query {
+    memo(id: ID!): Memo!
     memos: [Memo!]!
+    user(id: ID!): User!
     users: [User!]!
 }
 
-input NewMemo {
-    content: String!
-    userId: String!
-}
-
 type Mutation {
-    createMemo(input: NewMemo!): Memo!
+    createUser(user: UserInput!): User!
+    updateUser(id: ID!, user: UserInput!): User!
+    deleleUser(id: ID!): User!
+
+    createMemo(memo: MemoInput!): Memo!
+    updateMemo(id: ID!, memo: MemoInput!): Memo!
+    deleteMemo(id: ID!): Memo!
 }
 
 type Subscription {
