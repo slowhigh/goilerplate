@@ -1,9 +1,0 @@
-FROM mysql:latest
-
-LABEL maintainer="someday"
-
-ENV MYSQL_ROOT_PASSWORD=1234 \
-    PORT=3306 \
-    MYSQL_DATABASE=yt_go_auth
-
-EXPOSE $PORT
