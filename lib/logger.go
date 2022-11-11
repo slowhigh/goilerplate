@@ -1,12 +1,16 @@
 package lib
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
+	gorm_logger "gorm.io/gorm/logger"
 )
 
 type Logger struct {
@@ -21,12 +25,17 @@ type FxLogger struct {
 	*Logger
 }
 
+type GormLogger struct {
+	*Logger
+	gorm_logger.Config
+}
+
 var (
 	globalLogger *Logger
 	zapLogger    *zap.Logger
 )
 
-// get the logger
+// GetLogger get the logger
 func GetLogger() Logger {
 	if globalLogger == nil {
 		logger := newLogger(NewEnv())
@@ -36,7 +45,7 @@ func GetLogger() Logger {
 	return *globalLogger
 }
 
-// get the gin logger
+// GetGinLogger get the gin logger
 func (l Logger) GetGinLogger() GinLogger {
 	logger := zapLogger.WithOptions(
 		zap.WithCaller(false),
@@ -47,7 +56,7 @@ func (l Logger) GetGinLogger() GinLogger {
 	}
 }
 
-// get the fx logger
+// GetFxLogger get the fx logger
 func (l *Logger) GetFxLogger() fxevent.Logger {
 	logger := zapLogger.WithOptions(
 		zap.WithCaller(false),
@@ -58,7 +67,22 @@ func (l *Logger) GetFxLogger() fxevent.Logger {
 	}
 }
 
-// log event for fx logger
+// GetGormLogger get the gorm logger
+func (l Logger) GetGormLogger() *GormLogger {
+	logger := zapLogger.WithOptions(
+		zap.AddCaller(),
+		zap.AddCallerSkip(3),
+	)
+
+	return &GormLogger{
+		Logger: newSugaredLogger(logger),
+		Config: gorm_logger.Config{
+			LogLevel: gorm_logger.Info,
+		},
+	}
+}
+
+// LogEvent log event for fx logger
 func (l *FxLogger) LogEvent(event fxevent.Event) {
 	switch e := event.(type) {
 	case *fxevent.OnStartExecuting:
@@ -125,13 +149,13 @@ func (l *FxLogger) LogEvent(event fxevent.Event) {
 	}
 }
 
-// interface implementation for gin-framework
+// Write interface implementation for gin-framework
 func (gl GinLogger) Write(p []byte) (n int, err error) {
 	gl.Info(string(p))
 	return len(p), nil
 }
 
-// prits go-fx logs
+// Printf prits go-fx logs
 func (l FxLogger) Printf(str string, args ...interface{}) {
 	if len(args) > 0 {
 		l.Debugf(str, args)
@@ -182,3 +206,48 @@ func newLogger(env Env) Logger {
 	return *logger
 }
 
+// LogMode log mode
+func (gl *GormLogger) LogMode(level gorm_logger.LogLevel) gorm_logger.Interface {
+	newLogger := *gl
+	newLogger.LogLevel = level
+	return &newLogger
+}
+
+// Info print info messages
+func (gl GormLogger) Info(ctx context.Context, msg string, data ...interface{}) {
+	if gl.LogLevel >= gorm_logger.Info {
+		gl.Debugf(msg, data...)
+	}
+}
+
+// Warn print warn messages
+func (gl GormLogger) Warn(ctx context.Context, msg string, data ...interface{}) {
+	if gl.LogLevel >= gorm_logger.Warn {
+		gl.Warnf(msg, data...)
+	}
+}
+
+// Error print error messages
+func (gl GormLogger) Error(ctx context.Context, msg string, data ...interface{}) {
+	if gl.LogLevel >= gorm_logger.Error {
+		gl.Errorf(msg, data...)
+	}
+}
+
+// Trace print sql message
+func (gl GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
+	if gl.LogLevel < gorm_logger.Silent {
+		return
+	}
+
+	elapsed := time.Since(begin)
+	sql, rows := fc()
+
+	if gl.LogLevel >= gorm_logger.Info {
+		gl.Debugf("[%d ms, %d rows] sql -> %s", elapsed.Milliseconds(), rows, sql)
+	} else if gl.LogLevel >= gorm_logger.Warn {
+		gl.SugaredLogger.Warnf("[%d ms, %d rows] sql -> %s", elapsed.Milliseconds(), rows, sql)
+	} else if gl.LogLevel >= gorm_logger.Error {
+		gl.SugaredLogger.Errorf("[%d ms, %d rows] sql -> %s", elapsed.Milliseconds(), rows, sql)
+	}
+}
