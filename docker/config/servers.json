@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "goilerplate",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "goilerplate",
+      "Username": "user",
+      "PassFile": "/pgpass",
+      "SSLMode": "prefer"
+    }
+  }
+}

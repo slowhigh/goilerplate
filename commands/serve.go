@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"os"
+
 	"github.com/oxyrinchus/goilerplate/api/middlewares"
 	"github.com/oxyrinchus/goilerplate/api/routes"
 	"github.com/oxyrinchus/goilerplate/lib"
@@ -33,7 +35,7 @@ func (sc *ServeCommand) Run() lib.CommandRunner {
 
 		logger.Info("Running server")
 		if env.ServerPort == "" {
-			_ = router.Gin.Run()
+			_ = router.Gin.Run(":" + os.Getenv("PORT"))
 		} else {
 			_ = router.Gin.Run(":" + env.ServerPort)
 		}

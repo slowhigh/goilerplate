@@ -3,18 +3,19 @@ package repositories
 import (
 	"github.com/oxyrinchus/goilerplate/lib"
 	"github.com/oxyrinchus/goilerplate/models"
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	lib.PostgresDB
+	*gorm.DB
 	logger lib.Logger
 }
 
-func NewUserRepository(db lib.PostgresDB, logger lib.Logger) UserRepository {
-	db.AutoMigrate(&models.User{})
+func NewUserRepository(db lib.Database, logger lib.Logger) UserRepository {
+	db.Postgres.AutoMigrate(&models.User{})
 
 	return UserRepository{
-		PostgresDB: db,
-		logger:     logger,
+		DB: db.Postgres,
+		logger:   logger,
 	}
 }
