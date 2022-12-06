@@ -4,8 +4,8 @@ import "go.uber.org/fx"
 
 // exports libraries dependency
 var Module = fx.Options(
-	fx.Provide(NewRouter),
+	fx.Provide(NewDatabase),
 	fx.Provide(NewEnv),
 	fx.Provide(GetLogger),
-	fx.Provide(NewPostgresDB),
+	fx.Provide(NewRouter),
 )
