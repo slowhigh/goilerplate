@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  For the perfect architecture. 🔥🔥🔥
+  For the perfect structure. 🔥🔥🔥
 </p>
 
 ## Contents
