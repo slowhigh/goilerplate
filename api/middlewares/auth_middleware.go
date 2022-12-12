@@ -14,6 +14,7 @@ type AuthMiddleware struct {
 	authService services.AuthService
 }
 
+// NewAuthMiddleware initialize auth middleware.
 func NewAuthMiddleware(logger lib.Logger, authService services.AuthService) AuthMiddleware {
 	return AuthMiddleware{
 		logger:      logger,
@@ -21,8 +22,10 @@ func NewAuthMiddleware(logger lib.Logger, authService services.AuthService) Auth
 	}
 }
 
+// Setup sets up auth middleware.
 func (am AuthMiddleware) Setup() {}
 
+// Handler handles middleware functionality.
 func (am AuthMiddleware) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		accessToken, _ := c.Cookie(common.ACCESS_TOKEN)
@@ -33,7 +36,10 @@ func (am AuthMiddleware) Handler() gin.HandlerFunc {
 		
 		userID, newAccessToken, err := am.authService.Authorize(accessToken, refreshToken)
 		if err != nil {
-			am.logger.Info(err)
+			c.JSON(http.StatusInternalServerError, nil)
+			c.Abort()
+			return
+		} else if userID == "" {
 			c.JSON(http.StatusUnauthorized, nil)
 			c.Abort()
 			return

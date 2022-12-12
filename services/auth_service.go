@@ -1,13 +1,11 @@
 package services
 
 import (
-	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 
 	"github.com/oxyrinchus/goilerplate/common"
 	"github.com/oxyrinchus/goilerplate/lib"
@@ -18,12 +16,10 @@ import (
 type AccessTokenClaims struct {
 	UserUUID string `json:"uid"`
 	Role     string `json:"role"`
-	// Role     []string `json:"role"`
 	jwt.RegisteredClaims
 }
 
 type RefreshTokenClaims struct {
-	// UserUUID string `json:"uid"`
 	jwt.RegisteredClaims
 }
 
@@ -34,6 +30,7 @@ type AuthService struct {
 	env            lib.Env
 }
 
+// NewAuthService initialize auth service
 func NewAuthService(logger lib.Logger, userService UserService, authRepository repositories.AuthRepository, env lib.Env) AuthService {
 	return AuthService{
 		logger:         logger,
@@ -43,18 +40,8 @@ func NewAuthService(logger lib.Logger, userService UserService, authRepository r
 	}
 }
 
-func (as AuthService) SignUp(email, password, name, role string) (result bool, err error) {
-	foundUser, err := as.userService.FindUserByEmail(email)
-	if err != nil && err != gorm.ErrRecordNotFound {
-		as.logger.Error(err)
-		return false, err
-	}
-
-	if foundUser.ID != "" {
-		as.logger.Info("duplicated email")
-		return false, nil
-	}
-
+// SignUp signs up user.
+func (as AuthService) SignUp(email, password, name, role string) error {
 	newUser := models.User{
 		ID:       uuid.New().String(),
 		Email:    email,
@@ -63,94 +50,93 @@ func (as AuthService) SignUp(email, password, name, role string) (result bool, e
 		Role:     role,
 	}
 
-	if err := as.userService.CreateUser(newUser); err != nil {
+	err := as.userService.CreateUser(newUser)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SignIn signs in user.
+func (as AuthService) SignIn(email, password string, accessToken *string, refreshToken *string) (bool, error) {
+	user, err := as.userService.GetUserInfoByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err == bcrypt.ErrMismatchedHashAndPassword {
+		as.logger.Info("Not same password")
+		return false, nil
+	} else if err != nil {
 		as.logger.Error(err)
+		return false, err
+	}
+
+	*accessToken, err = as.generateAccessToken(user)
+	if err != nil {
+		return false, err
+	}
+
+	newSessionID := uuid.New().String()
+	*refreshToken, err = as.generateRefreshToken(newSessionID)
+	if err != nil {
+		return false, err
+	}
+
+	err = as.registerTokenSession(newSessionID, user.ID)
+	if err != nil {
 		return false, err
 	}
 
 	return true, nil
 }
 
-func (as AuthService) SignIn(email, password string) (accessToken string, refreshToken string, err error) {
-	user, err := as.userService.FindUserByEmail(email)
-	if err != nil {
-		as.logger.Error(err)
-		return "", "", err
-	}
-
-	if user.ID == "" {
-		as.logger.Info("Not found user")
-		return "", "", nil
-	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		as.logger.Error(err)
-		return "", "", err
-	}
-
-	accessToken, err = as.generateAccessToken(user)
-	if err != nil {
-		as.logger.Error(err)
-		return "", "", err
-	}
-
-	newSessionID := uuid.New().String()
-	refreshToken, err = as.generateRefreshToken(newSessionID)
-	if err != nil {
-		as.logger.Error(err)
-		return "", "", err
-	}
-
-	if err = as.registerTokenSession(newSessionID, user.ID); err != nil {
-		as.logger.Error(err)
-		return "", "", err
-	}
-
-	return accessToken, refreshToken, nil
-}
-
-func (as AuthService) Authorize(accessToken, refreshToken string) (userID string, newAccessToken string, err error) {
+// Authorize authorizes the generated token
+func (as AuthService) Authorize(accessToken, refreshToken string, ) (userID string, newAccessToken string, err error) {
 	if accessToken != "" {
-		accessTokenClaims, err := as.verifyAccessToken(accessToken)
-		if err == nil {
+		accessTokenClaims := as.verifyAccessToken(accessToken)
+		if accessTokenClaims != nil {
 			return accessTokenClaims.UserUUID, "", nil
 		}
 	}
 
 	if refreshToken == "" {
-		return "", "", errors.New("refreshToken is empty")
+		return "", "", nil
 	}
 
-	refreshTokenClaims, err := as.verifyRefreshToken(refreshToken)
-	if err != nil {
-		return "", "", err
+	refreshTokenClaims := as.verifyRefreshToken(refreshToken)
+	if refreshTokenClaims == nil {
+		return "", "", nil
 	}
 
 	userID, err = as.findTokenSession(refreshTokenClaims.RegisteredClaims.ID)
 	if err != nil {
 		return "", "", err
 	}
+	if userID == "" {
+		return "", "", nil
+	}
 
-	user, err := as.userService.FindUserByID(userID)
+	user, err := as.userService.GetUserInfoByID(userID)
 	if err != nil {
 		return "", "", err
 	}
 
 	accessToken, err = as.generateAccessToken(user)
 	if err != nil {
-		as.logger.Error(err)
 		return "", "", err
 	}
 
 	return userID, accessToken, nil
 }
 
-func (as AuthService) generateAccessToken(user models.User) (token string, err error) {
+// generateAccessToken generates the access token with given user.
+func (as AuthService) generateAccessToken(user models.User) (string, error) {
 	claims := AccessTokenClaims{
 		UserUUID: user.ID,
 		Role:     user.Role,
-		// Email:    user.Email,
-		// Name:     user.Name,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Second * common.ACCESS_TOKEN_TTL)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -159,16 +145,19 @@ func (as AuthService) generateAccessToken(user models.User) (token string, err e
 		},
 	}
 
-	if token, err = jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(as.env.JWTSecret)); err != nil {
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(as.env.JWTSecret))
+	if err != nil {
+		as.logger.Error(err)
 		return "", err
 	}
 
+	as.logger.Debugf("[generateAccessToken] {token:%s}", token)
 	return token, nil
 }
 
-func (as AuthService) generateRefreshToken(tokenID string) (token string, err error) {
+// generateRefreshToken generates the refresh token with given token's ID.
+func (as AuthService) generateRefreshToken(tokenID string) (string, error) {
 	claims := RefreshTokenClaims{
-		//UserUUID: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Second * common.REFRESH_TOKEN_TTL)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -178,39 +167,44 @@ func (as AuthService) generateRefreshToken(tokenID string) (token string, err er
 		},
 	}
 
-	if token, err = jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(as.env.JWTSecret)); err != nil {
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(as.env.JWTSecret))
+	if err != nil {
+		as.logger.Error(err)
 		return "", err
 	}
 
+	as.logger.Debugf("[generateRefreshToken] {token:%s}", token)
 	return token, nil
 }
 
-func (as AuthService) verifyAccessToken(tokenString string) (*AccessTokenClaims, error) {
+// verifyAccessToken verifies the signatured access-token and return parsed access-claims.
+func (as AuthService) verifyAccessToken(tokenString string) *AccessTokenClaims {
 	claims := AccessTokenClaims{}
 
-	if err := common.VerifyToken(tokenString, &claims, as.env.JWTSecret); err != nil {
-		as.logger.Error(err)
-		return nil, err
+	if !common.VerifyToken(tokenString, &claims, as.env.JWTSecret) {
+		return nil
 	}
 
-	return &claims, nil
+	return &claims
 }
 
-func (as AuthService) verifyRefreshToken(tokenString string) (*RefreshTokenClaims, error) {
+// verifyRefreshToken verifies the signatured refresh-token and return parsed refresh-claims.
+func (as AuthService) verifyRefreshToken(tokenString string) *RefreshTokenClaims {
 	claims := RefreshTokenClaims{}
 
-	if err := common.VerifyToken(tokenString, &claims, as.env.JWTSecret); err != nil {
-		as.logger.Error(err)
-		return nil, err
+	if !common.VerifyToken(tokenString, &claims, as.env.JWTSecret) {
+		return nil
 	}
 
-	return &claims, nil
+	return &claims
 }
 
+// registerTokenSession registers tokenID and userID in the session.
 func (as AuthService) registerTokenSession(tokenID, userID string) error {
 	return as.authRepository.Set(tokenID, userID, time.Second*common.REFRESH_TOKEN_TTL)
 }
 
+// findTokenSession finds the userID matching the given tokenID in the session.
 func (as AuthService) findTokenSession(tokenID string) (userID string, err error) {
 	return as.authRepository.Get(tokenID)
 }

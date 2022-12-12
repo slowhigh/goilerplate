@@ -13,7 +13,7 @@ type UserRoute struct {
 	userController controllers.UserController
 }
 
-// NewUserRoute initialize user route
+// NewUserRoute initialize user route.
 func NewUserRoute(logger lib.Logger, router lib.Router, authMiddleware middlewares.AuthMiddleware, userController controllers.UserController) UserRoute {
 	return UserRoute{
 		logger:         logger,
@@ -23,10 +23,16 @@ func NewUserRoute(logger lib.Logger, router lib.Router, authMiddleware middlewar
 	}
 }
 
-// Setup sets up user route
+// Setup sets up user route.
 func (ur UserRoute) Setup() {
 	ur.logger.Info("Setting up user route")
-	api := ur.router.Gin.Group("/user").Use(ur.authMiddleware.Handler())
+
+	api := ur.router.Gin.Group("/user")
+	{
+		api.GET("/exists/:email", ur.userController.ExistsEmail)
+	}
+
+	api.Use(ur.authMiddleware.Handler())
 	{
 		api.GET("/info", ur.userController.GetUserInfo)
 	}
