@@ -11,6 +11,7 @@ type AuthRoute struct {
 	authController controllers.AuthController
 }
 
+// NewAuthRoute initialize auth route
 func NewAuthRoute(logger lib.Logger, router lib.Router, authController controllers.AuthController) AuthRoute {
 	return AuthRoute{
 		logger: logger,
@@ -19,11 +20,13 @@ func NewAuthRoute(logger lib.Logger, router lib.Router, authController controlle
 	}
 }
 
+// Setup sets up auth route
 func (au AuthRoute) Setup() {
 	au.logger.Info("Setting up auth route")
 	api := au.router.Gin.Group("/auth")
 	{
 		api.POST("/signup", au.authController.SignUp)
 		api.POST("/signin", au.authController.SignIn)
+		
 	}
 }

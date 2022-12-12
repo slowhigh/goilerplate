@@ -7,6 +7,7 @@ var Module = fx.Options(
 	fx.Provide(NewRoutes),
 	fx.Provide(NewUserRoute),
 	fx.Provide(NewAuthRoute),
+	fx.Provide(NewMemoRoute),
 )
 
 type Route interface {
@@ -16,10 +17,11 @@ type Route interface {
 type Routes []Route
 
 // create a new routes
-func NewRoutes(userRoute UserRoute, authRoute AuthRoute) Routes {
+func NewRoutes(userRoute UserRoute, authRoute AuthRoute, memoRoute MemoRoute) Routes {
 	return Routes{
 		userRoute,
 		authRoute,
+		memoRoute,
 	}
 }
 

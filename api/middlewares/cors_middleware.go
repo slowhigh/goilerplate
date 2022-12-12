@@ -11,7 +11,7 @@ type CorsMiddleware struct {
 	env    lib.Env
 }
 
-// create a new cors middleware
+// NewCorsMiddleware initialize cors middleware.
 func NewCorsMiddleware(router lib.Router, logger lib.Logger, env lib.Env) CorsMiddleware {
 	return CorsMiddleware{
 		router: router,
@@ -20,7 +20,7 @@ func NewCorsMiddleware(router lib.Router, logger lib.Logger, env lib.Env) CorsMi
 	}
 }
 
-// set up cors middleware
+// Setup sets up cors middleware.
 func (cm CorsMiddleware) Setup() {
 	cm.logger.Info("Setting up cors middleware")
 

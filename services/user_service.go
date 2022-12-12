@@ -12,7 +12,7 @@ type UserService struct {
 	userRepository repositories.UserRepository
 }
 
-// NewUserService initialize user service
+// NewUserService initialize user service.
 func NewUserService(logger lib.Logger, userRepository repositories.UserRepository) UserService {
 	return UserService{
 		logger:         logger,
@@ -20,33 +20,50 @@ func NewUserService(logger lib.Logger, userRepository repositories.UserRepositor
 	}
 }
 
-func (us UserService) FindUserByID(id string) (user models.User, err error) {
-	return user, us.userRepository.Where(&models.User{ID: id}).First(&user).Error
+// GetUserInfoByID gets the user matching given the id.
+func (us UserService) GetUserInfoByID(id string) (user models.User, err error) {
+	return us.userRepository.FindOne(models.User{ID: id})
 }
 
-func (us UserService) FindUserByEmail(email string) (user models.User, err error) {
-	return user, us.userRepository.Where(&models.User{Email: email}).First(&user).Error
+// GetUserInfoByEmail gets the user matching given the email.
+func (us UserService) GetUserInfoByEmail(email string) (user models.User, err error) {
+	return us.userRepository.FindOne(models.User{Email: email})
 }
 
-func (us UserService) FindUsers() (users []models.User, err error) {
-	return users, us.userRepository.Find(&users).Error
+// GetUsers get all users.
+func (us UserService) GetUsers() (users []models.User, err error) {
+	return us.userRepository.FindAll(models.User{})
 }
 
+// CreateUser inserts the user.
 func (us UserService) CreateUser(user models.User) error {
 	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 	if err != nil {
+		us.logger.Error(err)
 		return err
-	} else {
-		user.Password = string(encryptedPassword)
 	}
 
-	return us.userRepository.Create(&user).Error
+	user.Password = string(encryptedPassword)
+
+	err = us.userRepository.Create(user)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
+// UpdateUser updates the user matching the given user. but the user must contain an ID.
 func (us UserService) UpdateUser(user models.User) error {
-	return us.userRepository.Save(&user).Error
+	return us.userRepository.Update(user)
 }
 
-func (us UserService) DeleteUser(id uint) error {
-	return us.userRepository.Delete(&models.User{}, id).Error
+// DeleteUser deletes the user matching the given user's ID.
+func (us UserService) DeleteUser(id string) error {
+	return us.userRepository.Delete(models.User{ID: id})
+}
+
+// ExistsEmail verify that at least one user matches the given email.
+func (us UserService) ExistsEmail(email string) (bool, error) {
+	return us.userRepository.Exists(models.User{Email: email})
 }
