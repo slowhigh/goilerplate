@@ -65,20 +65,20 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; refresh_token=eyJh
 <br>
 
 ## Implemented Features
--   <b>Routing</b> - Gin Web Framework [#Docs](https://gin-gonic.com/docs) [#GitHub](https://github.com/gin-gonic/gin)
+-   <b>Routing</b> - Gin Web Framework ----------------------------[📚](https://gin-gonic.com/docs) [:octocat:](https://github.com/gin-gonic/gin)
 
--   <b>CLI</b> - Cobra [#Docs](https://cobra.dev) [#GitHub](https://github.com/spf13/cobra)
+-   <b>CLI</b> - Cobra -------------------------------------------------[📚](https://cobra.dev) [:octocat:](https://github.com/spf13/cobra)
 
--   <b>Dependency Injection</b> - Fx [#Docs](https://uber-go.github.io/fx/get-started) [#GitHub](https://github.com/uber-go/fx)
+-   <b>Dependency Injection</b> - Fx --------------------------------[📚](https://uber-go.github.io/fx/get-started) [:octocat:](https://github.com/uber-go/fx)
 
--   <b>Environment</b> - Viper [#GitHub](https://github.com/spf13/viper)
+-   <b>Environment</b> - Viper ---------------------------------------[:octocat:](https://github.com/spf13/viper)
 
--   <b>Logging</b> - Zap [#GitHub](https://github.com/uber-go/zap)
+-   <b>Logging</b> - Zap ----------------------------------------------[:octocat:](https://github.com/uber-go/zap)
 
--   <b>PostgreSQL</b> - GORM [#Docs](https://gorm.io/docs) [#GitHub](https://github.com/go-gorm/gorm)
+-   <b>PostgreSQL</b> - GORM ---------------------------------------[📚](https://gorm.io/docs) [:octocat:](https://github.com/go-gorm/gorm)
 
--   <b>Redis</b> - Go-Redis [#Docs](https://redis.uptrace.dev/guide) [#GitHub](https://github.com/go-redis/redis)
+-   <b>Redis</b> - Go-Redis -------------------------------------------[📚](https://redis.uptrace.dev/guide) [:octocat:](https://github.com/go-redis/redis)
 
--   <b>DB Viewer</b> - pgAdmin4 (Web) [#DockerHub](https://hub.docker.com/r/dpage/pgadmin4)
+-   <b>DB Viewer</b> - pgAdmin4 (Web) -----------------------------[🐳](https://hub.docker.com/r/dpage/pgadmin4)
 
--   <b>Authentication</b> - JWT (Access + refresh) [#GitHub](https://github.com/golang-jwt/jwt)
+-   <b>Authentication</b> - JWT (Access + refresh) ------------------[:octocat:](https://github.com/golang-jwt/jwt)
