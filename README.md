@@ -27,7 +27,7 @@
 <br>
 
 ## Default API
-### SignUp
+#### SignUp
 ```HTTP
 POST /auth/signup HTTP/1.1
 Host: localhost:5000
@@ -42,7 +42,7 @@ Content-Length: 103
 }
 ```
 
-### SignIn
+#### SignIn
 ```HTTP
 POST /auth/signin HTTP/1.1
 Host: localhost:5000
@@ -55,7 +55,7 @@ Content-Length: 58
 }
 ```
 
-### User Info
+#### User Info
 ```HTTP
 GET /user/info HTTP/1.1
 Host: localhost:5000
