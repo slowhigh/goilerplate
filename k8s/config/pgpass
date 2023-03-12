@@ -1,0 +1,2 @@
+# hostname:port:database:username:password
+postgres.default.svc.cluster.local:5432:goilerplate:user:1234
