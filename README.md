@@ -7,60 +7,10 @@
 </p>
 
 ## Contents
-- [Contents](#contents)
-- [Quick start](#quick-start)
-- [Default API](#default-api)
-  -   [SignUp](#signup)
-  -   [SignIn](#signin)
-  -   [User Info](#user-info)
 - [Implemented Features](#implemented-features)
-
-<br>
-
-## Quick start
-- Make sure you have docker installed.
-- Copy `/env/stage.env` to `.env`
-- Run `docker-compose up -d`
-  - API Host: localhost:5000
-  - DB Viewer: localhost:8080 - Email: user@goilerplate.com - PW: 1234
-
-<br>
-
-## Default API
-#### SignUp
-```HTTP
-POST /auth/signup HTTP/1.1
-Host: localhost:5000
-Content-Type: application/json
-Content-Length: 103
-
-{
-    "Email": "test@gmail.com",
-    "Password": "1234",
-    "Name": "test",
-    "Role": "admin"
-}
-```
-
-#### SignIn
-```HTTP
-POST /auth/signin HTTP/1.1
-Host: localhost:5000
-Content-Type: application/json
-Content-Length: 58
-
-{
-    "Email":"test@gmail.com",
-    "Password":"1234"
-}
-```
-
-#### User Info
-```HTTP
-GET /user/info HTTP/1.1
-Host: localhost:5000
-Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
+- [Kubernetes](#kubernetes)
+- [Quick start](#quick-start)
+- [Auth API](#auth-api-postman-tool)
 
 <br>
 
@@ -82,3 +32,66 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; refresh_token=eyJh
 -   <b>DB Viewer</b> - pgAdmin4 (Web) -----------------------------[🐳](https://hub.docker.com/r/dpage/pgadmin4)
 
 -   <b>Authentication</b> - JWT (Access + refresh) ------------------[:octocat:](https://github.com/golang-jwt/jwt)
+
+<br>
+
+## Kubernetes
+- api.yml
+  - Deployment
+  - Service
+
+- postgres.yml
+  - Deployment
+  - ConfigMap
+  - Service
+  - PersistentVolume
+  - PersistentVolumeClaim
+
+- pgadmin4.yml
+  - Deployment
+  - ConfigMap
+  - Service
+
+- redis.yml
+  - Deployment
+  - Service
+  - PersistentVolume
+  - PersistentVolumeClaim
+
+<br>
+
+## Quick start
+#### Docker-Compose Infra
+- Make sure you have docker installed.
+- Copy `/env/stage.env` to `.env`
+- Run `docker-compose up -d`
+  - API Host: localhost:5000
+    - [POST] auth/signup
+    - [POST] auth/signin
+    - [GET] user/info
+  - DB Viewer Host: localhost:8080
+    - Email: user@goilerplate.com - PW: 1234
+
+#### Kubernetes Infra
+- Make sure you have kubectl(Kubernetes) installed. 
+- Run `kubectl apply -f .\k8s\`
+  - API Host: localhost:32000
+    - [POST] auth/signup
+    - [POST] auth/signin
+    - [GET] user/info
+  - DB Viewer Host: localhost:30080
+    - Email: user@goilerplate.com - PW: 1234
+
+<br>
+
+## Auth API (Postman Tool)
+#### SignUp
+![auth/signup](img/auth-signup.png)
+
+#### SignIn
+![auth/signin](img/auth-signin.png)
+![access token](img/access-token.png)
+![refresh token](img/refresh-token.png)
+
+#### User Info
+![user/info](img/user-info.png)
