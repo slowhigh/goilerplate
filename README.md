@@ -6,13 +6,22 @@
   For the perfect structure. 🔥🔥🔥
 </p>
 
+
 ## Contents
 - [Implemented Features](#implemented-features)
 - [Kubernetes](#kubernetes)
+  - [api.yml](#apiyml)
+  - [postgres.yml](#postgresyml)
+  - [pgadmin4.yml](#pgadmin4yml)
+  - [redis.yml](#redisyml)
 - [Quick start](#quick-start)
+  - [Docker-Compose Infra](#docker-compose-infra)
+  - [Kubernetes Infra](#kubernetes-infra)
 - [Auth API](#auth-api-postman-tool)
+  - [SignUp](#signup)
+  - [SignIn](#signin)
+  - [User Info](#user-info)
 
-<br>
 
 ## Implemented Features
 -   <b>Routing</b> - Gin Web Framework ----------------------------[📚](https://gin-gonic.com/docs) [:octocat:](https://github.com/gin-gonic/gin)
@@ -33,32 +42,30 @@
 
 -   <b>Authentication</b> - JWT (Access + refresh) ------------------[:octocat:](https://github.com/golang-jwt/jwt)
 
-<br>
 
 ## Kubernetes
-- api.yml
-  - Deployment
-  - Service
+#### [api.yml](./k8s/api.yml)
+- Deployment 
+- Service
 
-- postgres.yml
-  - Deployment
-  - ConfigMap
-  - Service
-  - PersistentVolume
-  - PersistentVolumeClaim
+#### [postgres.yml](./k8s/postgres.yml)
+- Deployment
+- ConfigMap
+- Service
+- PersistentVolume
+- PersistentVolumeClaim
 
-- pgadmin4.yml
-  - Deployment
-  - ConfigMap
-  - Service
+#### [pgadmin4.yml](./k8s/pgadmin4.yml)
+- Deployment
+- ConfigMap
+- Service
 
-- redis.yml
-  - Deployment
-  - Service
-  - PersistentVolume
-  - PersistentVolumeClaim
+#### [redis.yml](./k8s/redis.yml)
+- Deployment
+- Service
+- PersistentVolume
+- PersistentVolumeClaim
 
-<br>
 
 ## Quick start
 #### Docker-Compose Infra
@@ -82,16 +89,15 @@
   - DB Viewer Host: localhost:30080
     - Email: user@goilerplate.com - PW: 1234
 
-<br>
 
 ## Auth API (Postman Tool)
-#### SignUp
-![auth/signup](img/auth-signup.png)
+#### - SignUp
+<img alt="auth/signup" src="img/auth-signup.png" height="400px"></img>
 
-#### SignIn
-![auth/signin](img/auth-signin.png)
-![access token](img/access-token.png)
-![refresh token](img/refresh-token.png)
+#### - SignIn
+<img alt="auth/signin" src="img/auth-signin.png" height="400px"></img>
+<img alt="access token" src="img/access-token.png" height="400px"></img>
+<img alt="refresh token" src="img/refresh-token.png" height="400px"></img>
 
-#### User Info
-![user/info](img/user-info.png)
+#### - User Info
+<img alt="refresh token" src="img/user-info.png" height="400px"></img>
