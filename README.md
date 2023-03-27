@@ -18,9 +18,9 @@
   - [Docker-Compose Infra](#docker-compose-infra)
   - [Kubernetes Infra](#kubernetes-infra)
 - [Auth API](#auth-api-postman-tool)
-  - [SignUp](#signup)
-  - [SignIn](#signin)
-  - [User Info](#user-info)
+  - [Sign Up](#--signup)
+  - [Sign In](#--signin)
+  - [User Info](#--user-info)
 
 
 ## Implemented Features
