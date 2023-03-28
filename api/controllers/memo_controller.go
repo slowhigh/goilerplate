@@ -114,6 +114,11 @@ func (mc MemoController) UpdateMemo(c *gin.Context) {
 			mc.logger.Error(common.ERR_EMPTY_USER)
 			return http.StatusInternalServerError, nil, msg.CONTACT_SERVER_ADMIN
 		}
+		memoID := c.Param("id")
+		if memoID == "" {
+			mc.logger.Error(common.ERR_EMPTY_PARAM)
+			return http.StatusBadRequest, nil, msg.BAD_REQUEST
+		}
 
 		var dto dto.UpdateMemo
 		if err := c.ShouldBind(&dto); err != nil {
@@ -122,7 +127,7 @@ func (mc MemoController) UpdateMemo(c *gin.Context) {
 		}
 
 		newMemo := models.Memo{
-			ID:      dto.ID,
+			ID:      memoID,
 			Content: dto.Content,
 			UserID:  userID.(string),
 		}
