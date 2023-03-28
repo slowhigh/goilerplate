@@ -38,11 +38,13 @@ metadata:
   labels:
     app: redis
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: redis
   ports:
-  - port: 6379
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
 ---
 apiVersion: apps/v1
 kind: Deployment

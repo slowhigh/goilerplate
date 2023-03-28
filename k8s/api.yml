@@ -5,14 +5,13 @@ metadata:
   labels:
     app: api
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: api
   ports:
   - protocol: TCP
     port: 5000
     targetPort: 5000
-    nodePort: 32000
 ---
 apiVersion: apps/v1
 kind: Deployment
