@@ -29,9 +29,9 @@ func (mr MemoRoute) Setup() {
 	api := mr.router.Gin.Group("/memo").Use(mr.authMiddleware.Handler())
 	{
 		api.GET("/", mr.memoController.FindAllMemo)
+		api.POST("/", mr.memoController.CreateMemo)
 		api.GET("/:id", mr.memoController.FindOneMemo)
-		api.POST("/create", mr.memoController.CreateMemo)
-		api.POST("/update", mr.memoController.UpdateMemo)
-		api.GET("/delete/:id", mr.memoController.DeleteMemo)
+		api.PUT("/:id", mr.memoController.UpdateMemo)
+		api.DELETE("/:id", mr.memoController.DeleteMemo)
 	}
 }
