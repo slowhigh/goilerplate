@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./k8s/containers/api.Dockerfile
+          file: ./docker/api/Dockerfile
           push: true
           tags: someday94/goilerplate-api:${{ github.ref_name }}
 
