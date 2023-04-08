@@ -11,6 +11,8 @@ COPY . .
 
 COPY ./env/production.env ./.env
 
-RUN go build -o /server
+RUN rm -rf ./env
 
-CMD [ "/server", "serve" ]
+RUN go build -o ./server
+
+CMD [ "./server", "serve" ]

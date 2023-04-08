@@ -47,7 +47,7 @@ func (am AuthMiddleware) Handler() gin.HandlerFunc {
 
 		if newAccessToken != "" {
 			am.logger.Debug("newAccessToken : ", newAccessToken)
-			c.SetCookie(common.ACCESS_TOKEN, newAccessToken, common.ACCESS_TOKEN_TTL, "/", "localhost", false, true)
+			c.SetCookie(common.ACCESS_TOKEN, newAccessToken, common.ACCESS_TOKEN_TTL, "/", "", false, true)
 		}
 		
 		am.logger.Debug("userID : ", userID)

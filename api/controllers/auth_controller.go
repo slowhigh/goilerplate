@@ -68,8 +68,8 @@ func (ac AuthController) SignIn(c *gin.Context) {
 			return http.StatusOK, false, msg.NOT_MATCH_ID_PW
 		}
 
-		c.SetCookie(common.ACCESS_TOKEN, accessToken, common.ACCESS_TOKEN_TTL, "/", "localhost", false, true)
-		c.SetCookie(common.REFRESH_TOKEN, refreshToken, common.REFRESH_TOKEN_TTL, "/", "localhost", false, true)
+		c.SetCookie(common.ACCESS_TOKEN, accessToken, common.ACCESS_TOKEN_TTL, "/", "", false, true)
+		c.SetCookie(common.REFRESH_TOKEN, refreshToken, common.REFRESH_TOKEN_TTL, "/", "", false, true)
 
 		ac.logger.Info("SignIn Success")
 		return http.StatusOK, true, msg.SIGNIN_SUCCESS
