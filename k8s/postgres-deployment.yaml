@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: someday94/goilerplate-postgres:latest
+        ports:
+        - containerPort: 5432
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: "/var/lib/postgresql/data"
+          name: postgres-storage
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc
