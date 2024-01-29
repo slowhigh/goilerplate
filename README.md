@@ -41,16 +41,6 @@
 - [x] **Authentication** - JWT (Access + Refresh) ----------------- [📚](https://golang-jwt.github.io/jwt/) [:octocat:](https://github.com/golang-jwt/jwt)
 - [x] **Makefile** - make -------------------------------------------- [📚](https://www.gnu.org/savannah-checkouts/gnu/make/manual/make.html)
 - [x] **CI/CD** - GitHub-Actions ------------------------------------ [📚](https://docs.github.com/en/actions)
-- [ ] **EventSourcing - CQRS pattern**
-  - [ ] **Message Broker** - Kafka ------------------------------ [📚](https://pkg.go.dev/github.com/segmentio/kafka-go#section-readme) [🐳](https://hub.docker.com/r/bitnami/kafka) [:octocat:](https://github.com/segmentio/kafka-go)
-  - [ ] **Distributed Coordination Service** - Zookeeper ----- [📚](https://zookeeper.apache.org/doc/r3.8.1/index.html) [🐳](https://hub.docker.com/r/bitnami/zookeeper) [:octocat:](https://github.com/apache/zookeeper)
-  - [ ] **RPC(Remote Procedure Call)** - gRPC ---------------- [📚](https://pkg.go.dev/github.com/grpc-ecosystem/go-grpc-middleware@v1.3.0/retry) [:octocat:](https://github.com/grpc-ecosystem/go-grpc-middleware)
-  - [ ] **Distributed Tracing** - Jaeger ------------------------- [📚](https://www.jaegertracing.io/docs) [🐳](https://hub.docker.com/r/jaegertracing/all-in-one) [:octocat:](https://github.com/jaegertracing/jaeger)
-  - [ ] **MongoDB** - MongoDB Go Driver -------------------- [📚](https://www.mongodb.com/docs/drivers/go/current) [🐳](https://hub.docker.com/_/mongo) [:octocat:](https://github.com/mongodb/mongo-go-driver)
-  - [ ] **Distributed Search Engine** - Elasticsearch ----------- [📚](https://pkg.go.dev/github.com/elastic/go-elasticsearch/v8) [🐳](https://www.docker.elastic.co/r/elasticsearch) [:octocat:](https://github.com/elastic/go-elasticsearch)
-  - [ ] **Elasticsearch Dashboard** - Kibana ------------------- [📚](https://www.elastic.co/guide/en/kibana/current/get-started.html) [🐳](https://www.docker.elastic.co/r/kibana) [:octocat:](https://github.com/elastic/kibana)
-  - [ ] **Monitoring** - Prometheus ---------------------------- [📚](https://prometheus.io/docs/introduction/overview) [🐳](https://hub.docker.com/r/prom/prometheus) [:octocat:](https://github.com/prometheus/prometheus)
-  - [ ] **Prometheus Dashboard** - Grafana ------------------- [📚](https://grafana.com/docs/grafana/latest) [🐳](https://hub.docker.com/r/grafana/grafana) [:octocat:](https://github.com/grafana/grafana)
 
 #### Infra
 - [x] **CNI(Container Network Interface)**- flannel --------------- [:octocat:](https://github.com/flannel-io/flannel)
