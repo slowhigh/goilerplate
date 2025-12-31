@@ -100,7 +100,7 @@ $ make deploy-to-docker-desktop
 ```
 
 ##### API Server URL (api.localhost)
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/goilerplate/workspace/goilerplate/documentation/9185268-4a71a5ff-e919-4fd4-b88c-2b7b972c7aef?entity=&branch=&version=)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/slowhigh/workspace/goilerplate/folder/9185268-b468f5cc-48a3-42d6-9d93-c6ef7867b9f9?action=share&creator=9185268&ctx=documentation)
 
 ##### pgAdmin4 URL
 [https://pgadimin4.localhost](https://pgadimin4.localhost)
@@ -135,7 +135,7 @@ $ make deploy-to-cloud
 ```
 
 ##### API Server (api.goilerplate.com)
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/goilerplate/workspace/goilerplate/documentation/9185268-4a71a5ff-e919-4fd4-b88c-2b7b972c7aef?entity=&branch=&version=)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/slowhigh/workspace/goilerplate/folder/9185268-990c360f-7464-4263-9c75-403b68c1f07a?action=share&creator=9185268&ctx=documentation)
 
 ##### pgAdmin4
 [https://pgadimin4.localhost](https://pgadimin4.localhost)
